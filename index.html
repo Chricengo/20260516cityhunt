@@ -124,7 +124,7 @@
             <p style="font-weight:bold; color:var(--secondary)">問題 01</p>
             <div style="background:#fff9db; padding:20px; border-radius:12px; text-align:center; font-size:1.2rem;">_EL_WC_90_？_🏝️_🪵⬆️</div>
             <input type="text" id="q1-input" placeholder="答案是？">
-            <button class="main-btn" onclick="checkQ1()">下一關 (抽籤)</button>
+            <button class="main-btn" onclick="checkQ1()">下一題</button>
         </div>
 
         <div id="page-q2" class="page">
@@ -137,7 +137,7 @@
                 </div>
             </div>
             <input type="text" id="q2-input" placeholder="計算結果">
-            <button class="main-btn" onclick="checkQ2()">下一關 (抽籤)</button>
+            <button class="main-btn" onclick="checkQ2()">下一題</button>
         </div>
 
         <div id="page-q3" class="page">
@@ -149,7 +149,7 @@
                 🇭🇰：？
             </div>
             <input type="text" id="q3-input" placeholder="香港對應的是？">
-            <button class="main-btn" onclick="checkQ3()">下一關 (抽籤)</button>
+            <button class="main-btn" onclick="checkQ3()">下一題</button>
         </div>
 
         <div id="page-q4" class="page">
@@ -172,7 +172,7 @@
                     <span class="label-right">5.16m</span>
                 </div>
             </div>
-            <p style="text-align:center;">請找出：<br><b>m<sup>2</sup></b>。</p>
+            <p style="text-align:center;">請找出：<b>m<sup>2</sup></b>。</p>
             <input type="text" id="q5-input" placeholder="輸入計算結果">
             <button class="main-btn" onclick="checkQ5()">提交結算</button>
             <p id="q5-fail" style="color:var(--primary); text-align:center; display:none; font-weight:bold; margin-top:15px;">❌ 系統驗證失敗：數值溢出或邏輯錯誤</p>
@@ -183,7 +183,7 @@
 <script>
     const nameList = ["Aaron", "Enoch", "HY", "Jacqueline", "Crystal", "Alex"];
     let nextPageId = "";
-    let q3ErrorCount = 0; // 新增 Q3 錯誤計數器
+    let q4ErrorCount = 0; // 新增 Q4 錯誤計數器
 
     function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -248,26 +248,24 @@
         if(document.getElementById('q2-input').value.trim().replace(/\s+/g,'').toLowerCase()==='792m-29') triggerDraw('page-q3'); 
         else alert('計算錯誤！'); 
     }
-    
-    // Q3 修改：錯誤3次顯示提示
     function checkQ3() { 
-        if(document.getElementById('q3-input').value.trim()==='小滿定律') {
-            q3ErrorCount = 0; // 重置計數器
-            triggerDraw('page-q4'); 
-        } else {
-            q3ErrorCount++;
-            if (q3ErrorCount >= 3) {
-                alert('答案不對喔！\n\n💡 提示：這跟某位「愛心靈長類」核心成員的名字有關...');
-            } else {
-                alert('答案不對喔！再試試看。');
-            }
-        }
+        if(document.getElementById('q3-input').value.trim()==='小滿定律') triggerDraw('page-q4'); 
+        else alert('答案不對喔！'); 
     }
 
     function checkQ4() {
         const val = document.getElementById('q4-input').value.trim().replace(/\s+/g,'');
-        if(val === '20/9' || val === '2.22') showPage('page-q5');
-        else alert("提示：追及時間 = 距離差 / 速度差");
+        if(val === '20/9' || val === '2.22') {
+            q4ErrorCount = 0; // 成功後重置
+            showPage('page-q5');
+        } else {
+            q4ErrorCount++;
+            if (q4ErrorCount >= 3) {
+                alert("答案錯誤！\n\n💡 提示：追及時間 = 距離差 / 速度差");
+            } else {
+                alert("答案錯誤！請再計算一次。");
+            }
+        }
     }
 
     function checkQ5() {
