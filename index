@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026愛心靈長類cItY HuNt❤️🐒</title>
+    <style>
+        :root {
+            --primary: #ff4757;
+            --secondary: #5352ed;
+            --bg: #fdf2f2;
+            --disabled: #a4b0be;
+        }
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background-color: var(--bg);
+            margin: 0; padding: 0;
+            display: flex; justify-content: center;
+            min-height: 100vh;
+        }
+        /* 固定錦囊 */
+        .top-bar {
+            position: fixed; top: 0; width: 100%; max-width: 500px;
+            background: white; z-index: 1000;
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 8px; padding: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        .tool-btn {
+            background: #fff; border: 1.5px solid var(--primary);
+            border-radius: 10px; padding: 8px 2px;
+            font-size: 0.75rem; font-weight: bold; color: var(--primary);
+            cursor: pointer;
+        }
+        .tool-btn:disabled { border-color: var(--disabled); color: var(--disabled); opacity: 0.6; cursor: not-allowed; }
+        
+        .container { width: 100%; max-width: 450px; margin-top: 80px; padding: 15px; box-sizing: border-box; }
+        .card { background: white; padding: 25px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        
+        h1 { font-size: 1.2rem; color: var(--primary); text-align: center; margin: 0; }
+        .subtitle { text-align: center; color: #888; font-size: 0.8rem; margin: 8px 0 20px 0; }
+        
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .main-btn {
+            width: 100%; padding: 16px; background: var(--secondary);
+            color: white; border: none; border-radius: 12px;
+            font-size: 1rem; font-weight: bold; margin-top: 10px;
+            cursor: pointer;
+        }
+        input[type="text"] {
+            width: 100%; padding: 15px; border: 2px solid #eee;
+            border-radius: 12px; font-size: 1rem; box-sizing: border-box; margin: 15px 0;
+        }
+        .timer-msg {
+            background: var(--primary); color: white; text-align: center;
+            padding: 8px; border-radius: 8px; margin-bottom: 15px; font-weight: bold; display: none;
+        }
+        .math-box { background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 15px; font-size: 0.95rem; line-height: 1.6; }
+
+        .square-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0;
+        }
+        .square {
+            width: 140px;
+            height: 140px;
+            border: 3px solid var(--secondary);
+            background-color: rgba(83, 82, 237, 0.05);
+            position: relative;
+        }
+        .label-bottom { position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); font-weight: bold; color: var(--secondary); }
+        .label-right { position: absolute; right: -55px; top: 50%; transform: translateY(-50%) rotate(90deg); font-weight: bold; color: var(--secondary); }
+    </style>
+</head>
+<body>
+
+<div id="top-tools" class="top-bar" style="display: none;">
+    <button id="btn-helper" class="tool-btn" onclick="useTool('helper')">🆘 觀眾求救</button>
+    <button id="btn-timer" class="tool-btn" onclick="useTool('timer')">🤝 組員有愛</button>
+    <button id="btn-grace" class="tool-btn" onclick="useTool('grace')">🙏 神的恩典</button>
+</div>
+
+<div class="container">
+    <div class="card">
+        <h1>2026 City Hunt ❤️</h1>
+        <div class="subtitle">2026.05.16 愛心靈長類小組周</div>
+        <div id="timer-display" class="timer-msg"></div>
+
+        <!-- 主頁 -->
+        <div id="page-home" class="page active">
+            <div style="text-align: center; padding: 30px 0;">
+               <p>歡迎參與挑戰！<br>準備好後請按下方按鈕開始。</p>
+                <button class="main-btn" onclick="startApp()" style="background:var(--primary)">開始活動</button>
+            </div>
+        </div>
+
+        <!-- 問題 1 -->
+        <div id="page-q1" class="page">
+            <p style="font-weight:bold; color:var(--secondary)">問題 01</p>
+            <div style="background:#fff9db; padding:20px; border-radius:12px; text-align:center; font-size:1.2rem;">_EL_WC_90_？_🏝️_🪵⬆️</div>
+            <input type="text" id="q1-input" placeholder="答案是？">
+            <button class="main-btn" onclick="checkQ1()">下一關</button>
+        </div>
+
+        <!-- 問題 2 -->
+        <div id="page-q2" class="page">
+            <p style="font-weight:bold; color:var(--secondary)">問題 02</p>
+            <div class="math-box" style="text-align:center;">
+                lim<sub>h→0</sub> <span style="border-bottom: 1px solid #000;">[396(m+h)<sup>2</sup> - 29(m+h) - (396m<sup>2</sup> - 29m)]</span><br>h
+            </div>
+            <input type="text" id="q2-input" placeholder="計算結果">
+            <button class="main-btn" onclick="checkQ2()">下一關</button>
+        </div>
+
+        <!-- 問題 3 -->
+        <div id="page-q3" class="page">
+            <p style="font-weight:bold; color:var(--secondary)">問題 03</p>
+            <div class="math-box">
+                🇺🇸：凡事只要有可能出錯，那就一定會出錯。<br>
+                🇮🇹：約 80% 的結果往往源於 20% 的原因。<br>
+                🇬🇧：物體受到的合外力等於其質量與加速度的乘積。<br>
+                🇭🇰：？
+            </div>
+            <input type="text" id="q3-input" placeholder="香港對應的是？">
+            <button class="main-btn" onclick="checkQ3()">下一關</button>
+        </div>
+
+        <!-- 問題 4 -->
+        <div id="page-q4" class="page">
+            <p style="font-weight:bold; color:var(--secondary)">問題 04</p>
+            <div class="math-box">
+                甲、乙兩人在 400 米環形跑道上跑：<br>
+                🏃‍♂️ 甲速度：200 米/分鐘<br>
+                🏃 乙速度：20 米/分鐘<br><br>
+                <b>問：甲經過多長時間才能第一次追上乙？請分組證明。</b>
+            </div>
+            <input type="text" id="q4-input" placeholder="輸入答案(2個小數位)">
+            <button class="main-btn" onclick="checkQ4()">進入終章</button>
+        </div>
+
+        <!-- 問題 5 -->
+        <div id="page-q5" class="page">
+            <p style="font-weight:bold; color:var(--secondary)">問題 05</p>
+            <div class="square-container">
+                <div class="square">
+                    <span class="label-bottom">5.16m</span>
+                    <span class="label-right">5.16m</span>
+                </div>
+            </div>
+            <p style="text-align:center;">請找出：<b>m<sup>2</sup></b>。</p>
+            <input type="text" id="q5-input" placeholder="輸入計算結果">
+            <button class="main-btn" onclick="checkQ5()">提交結算</button>
+            <p id="q5-fail" style="color:var(--primary); text-align:center; display:none; font-weight:bold; margin-top:15px;">❌ 系統驗證失敗：數值溢出或邏輯錯誤</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function startApp() {
+        document.getElementById('top-tools').style.display = 'grid';
+        showPage('page-q1');
+    }
+
+    function useTool(type) {
+        document.getElementById(`btn-${type}`).disabled = true;
+        if (type === 'helper') { alert("觀眾求救：截圖傳至群組！"); window.print(); }
+        else if (type === 'timer') { startTimer(90); }
+        else if (type === 'grace') { alert("神的恩典：請向主持人請求一個提示。"); }
+    }
+
+    function startTimer(sec) {
+        const d = document.getElementById('timer-display');
+        d.style.display = 'block';
+        let l = sec;
+        const i = setInterval(() => {
+            l--; d.innerText = `⏱️ 討論時間：${l}s`;
+            if (l <= 0) { clearInterval(i); d.style.display = 'none'; alert("討論結束！"); }
+        }, 1000);
+    }
+
+    function checkQ1() { if(document.getElementById('q1-input').value.trim()==='巴士站') showPage('page-q2'); else alert('再想想！'); }
+    function checkQ2() { if(document.getElementById('q2-input').value.trim().replace(/\s+/g,'').toLowerCase()==='792m-29') showPage('page-q3'); else alert('計算錯誤！'); }
+    function checkQ3() { if(document.getElementById('q3-input').value.trim()==='小滿定律') showPage('page-q4'); else alert('答案不對喔！'); }
+    function checkQ4() {
+        const val = document.getElementById('q4-input').value.trim().replace(/\s+/g,'');
+        if(val === '20/9' || val === '2.22') showPage('page-q5');
+        else alert("提示：追及時間 = 距離差 / 速度差");
+    }
+
+    function checkQ5() {
+        const val = document.getElementById('q5-input').value.trim();
+        if(val === "") { alert("請填寫答案！"); return; }
+        document.getElementById('q5-fail').style.display = 'block';
+        alert("❌ 答案錯誤！");
+    }
+</script>
+</body>
+</html>
