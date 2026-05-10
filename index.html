@@ -18,6 +18,7 @@
             display: flex; justify-content: center;
             min-height: 100vh;
         }
+        /* 固定錦囊 */
         .top-bar {
             position: fixed; top: 0; width: 100%; max-width: 500px;
             background: white; z-index: 1000;
@@ -59,17 +60,35 @@
             padding: 8px; border-radius: 8px; margin-bottom: 15px; font-weight: bold; display: none;
         }
         
-        /* 核心修改：確保方程式一行顯示 */
+        /* 數學盒佈局優化 */
         .math-box { 
             background: #f8f9fa; 
-            padding: 12px 5px; 
+            padding: 15px 5px; 
             border-radius: 12px; 
             margin-bottom: 15px; 
-            font-size: 0.82rem; /* 稍微縮小字體以適應窄螢幕 */
-            line-height: 1.8; 
-            white-space: nowrap; /* 強制不換行 */
-            overflow-x: auto;   /* 萬一真的太窄，允許左右滑動而非斷行 */
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 60px;
+        }
+
+        /* 分數結構 */
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+        .numerator {
+            border-bottom: 1.5px solid #333;
+            padding: 0 5px;
+            font-size: 0.8rem; /* 縮小分子字體以適應寬度 */
+            white-space: nowrap;
+        }
+        .denominator {
+            font-size: 0.9rem;
+            padding-top: 2px;
         }
 
         .square-container {
@@ -103,6 +122,7 @@
         <div class="subtitle">2026.05.16 愛心靈長類小組周</div>
         <div id="timer-display" class="timer-msg"></div>
 
+        <!-- 主頁 -->
         <div id="page-home" class="page active">
             <div style="text-align: center; padding: 30px 0;">
                <p>歡迎參與挑戰！<br>準備好後請按下方按鈕開始。</p>
@@ -110,6 +130,7 @@
             </div>
         </div>
 
+        <!-- 問題 1 -->
         <div id="page-q1" class="page">
             <p style="font-weight:bold; color:var(--secondary)">問題 01</p>
             <div style="background:#fff9db; padding:20px; border-radius:12px; text-align:center; font-size:1.2rem;">_EL_WC_90_？_🏝️_🪵⬆️</div>
@@ -117,18 +138,24 @@
             <button class="main-btn" onclick="checkQ1()">下一關</button>
         </div>
 
+        <!-- 問題 2：優化後的分數一行顯示 -->
         <div id="page-q2" class="page">
             <p style="font-weight:bold; color:var(--secondary)">問題 02</p>
             <div class="math-box">
-                lim<sub>h→0</sub> <span style="border-bottom: 1px solid #000;">[396(m+h)<sup>2</sup>-29(m+h)-(396m<sup>2</sup>-29m)]</span> / h
+                <span>lim<sub>h→0</sub></span>
+                <div class="fraction">
+                    <span class="numerator">[396(m+h)<sup>2</sup>-29(m+h)-(396m<sup>2</sup>-29m)]</span>
+                    <span class="denominator">h</span>
+                </div>
             </div>
             <input type="text" id="q2-input" placeholder="計算結果">
             <button class="main-btn" onclick="checkQ2()">下一關</button>
         </div>
 
+        <!-- 問題 3 -->
         <div id="page-q3" class="page">
             <p style="font-weight:bold; color:var(--secondary)">問題 03</p>
-            <div class="math-box" style="white-space: normal; text-align: left; font-size: 0.95rem;">
+            <div class="math-box" style="display:block; text-align:left; padding:15px 20px;">
                 🇺🇸：凡事只要有可能出錯，那就一定會出錯。<br>
                 🇮🇹：約 80% 的結果往往源於 20% 的原因。<br>
                 🇬🇧：物體受到的合外力等於其質量與加速度的乘積。<br>
@@ -138,9 +165,10 @@
             <button class="main-btn" onclick="checkQ3()">下一關</button>
         </div>
 
+        <!-- 問題 4 -->
         <div id="page-q4" class="page">
             <p style="font-weight:bold; color:var(--secondary)">問題 04</p>
-            <div class="math-box" style="white-space: normal; text-align: left; font-size: 0.95rem;">
+            <div class="math-box" style="display:block; text-align:left; padding:15px 20px;">
                 甲、乙兩人在 400 米環形跑道上跑：<br>
                 🏃‍♂️ 甲速度：200 米/分鐘<br>
                 🏃 乙速度：20 米/分鐘<br><br>
@@ -150,6 +178,7 @@
             <button class="main-btn" onclick="checkQ4()">進入終章</button>
         </div>
 
+        <!-- 問題 5 -->
         <div id="page-q5" class="page">
             <p style="font-weight:bold; color:var(--secondary)">問題 05 (Final Stage)</p>
             <div class="square-container">
