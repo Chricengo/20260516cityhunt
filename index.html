@@ -18,7 +18,6 @@
             display: flex; justify-content: center;
             min-height: 100vh;
         }
-        /* 固定錦囊 */
         .top-bar {
             position: fixed; top: 0; width: 100%; max-width: 500px;
             background: white; z-index: 1000;
@@ -59,7 +58,19 @@
             background: var(--primary); color: white; text-align: center;
             padding: 8px; border-radius: 8px; margin-bottom: 15px; font-weight: bold; display: none;
         }
-        .math-box { background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 15px; font-size: 0.95rem; line-height: 1.6; }
+        
+        /* 核心修改：確保方程式一行顯示 */
+        .math-box { 
+            background: #f8f9fa; 
+            padding: 12px 5px; 
+            border-radius: 12px; 
+            margin-bottom: 15px; 
+            font-size: 0.82rem; /* 稍微縮小字體以適應窄螢幕 */
+            line-height: 1.8; 
+            white-space: nowrap; /* 強制不換行 */
+            overflow-x: auto;   /* 萬一真的太窄，允許左右滑動而非斷行 */
+            text-align: center;
+        }
 
         .square-container {
             display: flex;
@@ -92,7 +103,6 @@
         <div class="subtitle">2026.05.16 愛心靈長類小組周</div>
         <div id="timer-display" class="timer-msg"></div>
 
-        <!-- 主頁 -->
         <div id="page-home" class="page active">
             <div style="text-align: center; padding: 30px 0;">
                <p>歡迎參與挑戰！<br>準備好後請按下方按鈕開始。</p>
@@ -100,7 +110,6 @@
             </div>
         </div>
 
-        <!-- 問題 1 -->
         <div id="page-q1" class="page">
             <p style="font-weight:bold; color:var(--secondary)">問題 01</p>
             <div style="background:#fff9db; padding:20px; border-radius:12px; text-align:center; font-size:1.2rem;">_EL_WC_90_？_🏝️_🪵⬆️</div>
@@ -108,20 +117,18 @@
             <button class="main-btn" onclick="checkQ1()">下一關</button>
         </div>
 
-        <!-- 問題 2 -->
         <div id="page-q2" class="page">
             <p style="font-weight:bold; color:var(--secondary)">問題 02</p>
-            <div class="math-box" style="text-align:center;">
-                lim<sub>h→0</sub> <span style="border-bottom: 1px solid #000;">[396(m+h)<sup>2</sup> - 29(m+h) - (396m<sup>2</sup> - 29m)]</span><br>h
+            <div class="math-box">
+                lim<sub>h→0</sub> <span style="border-bottom: 1px solid #000;">[396(m+h)<sup>2</sup>-29(m+h)-(396m<sup>2</sup>-29m)]</span> / h
             </div>
             <input type="text" id="q2-input" placeholder="計算結果">
             <button class="main-btn" onclick="checkQ2()">下一關</button>
         </div>
 
-        <!-- 問題 3 -->
         <div id="page-q3" class="page">
             <p style="font-weight:bold; color:var(--secondary)">問題 03</p>
-            <div class="math-box">
+            <div class="math-box" style="white-space: normal; text-align: left; font-size: 0.95rem;">
                 🇺🇸：凡事只要有可能出錯，那就一定會出錯。<br>
                 🇮🇹：約 80% 的結果往往源於 20% 的原因。<br>
                 🇬🇧：物體受到的合外力等於其質量與加速度的乘積。<br>
@@ -131,29 +138,27 @@
             <button class="main-btn" onclick="checkQ3()">下一關</button>
         </div>
 
-        <!-- 問題 4 -->
         <div id="page-q4" class="page">
             <p style="font-weight:bold; color:var(--secondary)">問題 04</p>
-            <div class="math-box">
+            <div class="math-box" style="white-space: normal; text-align: left; font-size: 0.95rem;">
                 甲、乙兩人在 400 米環形跑道上跑：<br>
                 🏃‍♂️ 甲速度：200 米/分鐘<br>
                 🏃 乙速度：20 米/分鐘<br><br>
-                <b>問：甲經過多長時間才能第一次追上乙？請分組證明。</b>
+                <b>問：甲經過多長時間才能第一次追上乙？</b>
             </div>
-            <input type="text" id="q4-input" placeholder="輸入答案(2個小數位)">
+            <input type="text" id="q4-input" placeholder="輸入答案(corr to 2 sig. fig.)">
             <button class="main-btn" onclick="checkQ4()">進入終章</button>
         </div>
 
-        <!-- 問題 5 -->
         <div id="page-q5" class="page">
-            <p style="font-weight:bold; color:var(--secondary)">問題 05</p>
+            <p style="font-weight:bold; color:var(--secondary)">問題 05 (Final Stage)</p>
             <div class="square-container">
                 <div class="square">
                     <span class="label-bottom">5.16m</span>
                     <span class="label-right">5.16m</span>
                 </div>
             </div>
-            <p style="text-align:center;">請找出：<b>m<sup>2</sup></b>。</p>
+            <p style="text-align:center;">請找出：<br><b>m<sup>2</sup></b>。</p>
             <input type="text" id="q5-input" placeholder="輸入計算結果">
             <button class="main-btn" onclick="checkQ5()">提交結算</button>
             <p id="q5-fail" style="color:var(--primary); text-align:center; display:none; font-weight:bold; margin-top:15px;">❌ 系統驗證失敗：數值溢出或邏輯錯誤</p>
