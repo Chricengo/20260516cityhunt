@@ -18,7 +18,6 @@
             display: flex; justify-content: center;
             min-height: 100vh;
         }
-        /* 固定錦囊 */
         .top-bar {
             position: fixed; top: 0; width: 100%; max-width: 500px;
             background: white; z-index: 1000;
@@ -36,7 +35,7 @@
         .tool-btn:disabled { border-color: var(--disabled); color: var(--disabled); opacity: 0.6; cursor: not-allowed; }
         
         .container { width: 100%; max-width: 450px; margin-top: 80px; padding: 15px; box-sizing: border-box; }
-        .card { background: white; padding: 25px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .card { background: white; padding: 25px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); position: relative; }
         
         h1 { font-size: 1.2rem; color: var(--primary); text-align: center; margin: 0; }
         .subtitle { text-align: center; color: #888; font-size: 0.8rem; margin: 8px 0 20px 0; }
@@ -60,7 +59,6 @@
             padding: 8px; border-radius: 8px; margin-bottom: 15px; font-weight: bold; display: none;
         }
         
-        /* 數學盒佈局優化 */
         .math-box { 
             background: #f8f9fa; 
             padding: 15px 5px; 
@@ -72,38 +70,26 @@
             min-height: 60px;
         }
 
-        /* 分數結構 */
-        .fraction {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            vertical-align: middle;
-            margin-left: 4px;
-        }
-        .numerator {
-            border-bottom: 1.5px solid #333;
-            padding: 0 5px;
-            font-size: 0.8rem; /* 縮小分子字體以適應寬度 */
-            white-space: nowrap;
-        }
-        .denominator {
-            font-size: 0.9rem;
-            padding-top: 2px;
-        }
+        .fraction { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin-left: 4px; }
+        .numerator { border-bottom: 1.5px solid #333; padding: 0 5px; font-size: 0.8rem; white-space: nowrap; }
+        .denominator { font-size: 0.9rem; padding-top: 2px; }
 
-        .square-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 30px 0;
+        /* 抽籤動畫樣式 */
+        #draw-overlay {
+            display: none;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 2000; border-radius: 24px;
+            flex-direction: column; align-items: center; justify-content: center;
         }
-        .square {
-            width: 140px;
-            height: 140px;
-            border: 3px solid var(--secondary);
-            background-color: rgba(83, 82, 237, 0.05);
-            position: relative;
+        #name-display {
+            font-size: 2.5rem; font-weight: 800; color: var(--primary);
+            height: 60px; line-height: 60px; margin: 20px 0;
         }
+        .draw-hint { color: #666; font-size: 0.9rem; margin-bottom: 10px; }
+
+        .square-container { display: flex; flex-direction: column; align-items: center; margin: 30px 0; }
+        .square { width: 140px; height: 140px; border: 3px solid var(--secondary); background-color: rgba(83, 82, 237, 0.05); position: relative; }
         .label-bottom { position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); font-weight: bold; color: var(--secondary); }
         .label-right { position: absolute; right: -55px; top: 50%; transform: translateY(-50%) rotate(90deg); font-weight: bold; color: var(--secondary); }
     </style>
@@ -118,19 +104,23 @@
 
 <div class="container">
     <div class="card">
+        <div id="draw-overlay">
+            <div class="draw-hint">🌟 命運之輪正在旋轉 🌟</div>
+            <div id="name-display">準備中...</div>
+            <button id="confirm-draw-btn" class="main-btn" style="width: 80%; display: none;">出發！</button>
+        </div>
+
         <h1>2026 City Hunt ❤️</h1>
         <div class="subtitle">2026.05.16 愛心靈長類小組周</div>
         <div id="timer-display" class="timer-msg"></div>
 
-        <!-- 主頁 -->
         <div id="page-home" class="page active">
             <div style="text-align: center; padding: 30px 0;">
-               <p>歡迎參與挑戰！<br>準備好後請按下方按鈕開始。</p>
-                <button class="main-btn" onclick="startApp()" style="background:var(--primary)">開始活動</button>
+               <p>歡迎參與挑戰！<br>準備好後請進行<b>首輪抽籤</b>。</p>
+                <button class="main-btn" onclick="triggerDraw('page-q1')" style="background:var(--primary)">開始抽籤並啟動</button>
             </div>
         </div>
 
-        <!-- 問題 1 -->
         <div id="page-q1" class="page">
             <p style="font-weight:bold; color:var(--secondary)">問題 01</p>
             <div style="background:#fff9db; padding:20px; border-radius:12px; text-align:center; font-size:1.2rem;">_EL_WC_90_？_🏝️_🪵⬆️</div>
@@ -138,7 +128,6 @@
             <button class="main-btn" onclick="checkQ1()">下一關</button>
         </div>
 
-        <!-- 問題 2：優化後的分數一行顯示 -->
         <div id="page-q2" class="page">
             <p style="font-weight:bold; color:var(--secondary)">問題 02</p>
             <div class="math-box">
@@ -152,7 +141,6 @@
             <button class="main-btn" onclick="checkQ2()">下一關</button>
         </div>
 
-        <!-- 問題 3 -->
         <div id="page-q3" class="page">
             <p style="font-weight:bold; color:var(--secondary)">問題 03</p>
             <div class="math-box" style="display:block; text-align:left; padding:15px 20px;">
@@ -165,20 +153,18 @@
             <button class="main-btn" onclick="checkQ3()">下一關</button>
         </div>
 
-        <!-- 問題 4 -->
         <div id="page-q4" class="page">
             <p style="font-weight:bold; color:var(--secondary)">問題 04</p>
             <div class="math-box" style="display:block; text-align:left; padding:15px 20px;">
                 甲、乙兩人在 400 米環形跑道上跑：<br>
                 🏃‍♂️ 甲速度：200 米/分鐘<br>
                 🏃 乙速度：20 米/分鐘<br><br>
-                <b>問：甲經過多長時間才能第一次追上乙？請分隊證明。</b>
+                <b>問：甲經過多長時間才能第一次追上乙？請分組證明。</b>
             </div>
             <input type="text" id="q4-input" placeholder="輸入答案(corr to 2 sig. fig.)">
             <button class="main-btn" onclick="checkQ4()">進入終章</button>
         </div>
 
-        <!-- 問題 5 -->
         <div id="page-q5" class="page">
             <p style="font-weight:bold; color:var(--secondary)">問題 05 (Final Stage)</p>
             <div class="square-container">
@@ -196,15 +182,45 @@
 </div>
 
 <script>
+    const nameList = ["Aaron", "Enoch", "HY", "Jacqueline", "Crystal", "Alex"];
+    let nextPageId = "";
+
     function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         window.scrollTo(0,0);
     }
 
-    function startApp() {
-        document.getElementById('top-tools').style.display = 'grid';
-        showPage('page-q1');
+    function triggerDraw(targetId) {
+        nextPageId = targetId;
+        const overlay = document.getElementById('draw-overlay');
+        const nameDisp = document.getElementById('name-display');
+        const confirmBtn = document.getElementById('confirm-draw-btn');
+        
+        overlay.style.display = 'flex';
+        confirmBtn.style.display = 'none';
+        
+        let counter = 0;
+        const duration = 2000; 
+        const intervalTime = 80;
+        
+        const rolling = setInterval(() => {
+            nameDisp.innerText = nameList[counter % nameList.length];
+            counter++;
+        }, intervalTime);
+
+        setTimeout(() => {
+            clearInterval(rolling);
+            const winner = nameList[Math.floor(Math.random() * nameList.length)];
+            nameDisp.innerText = winner;
+            
+            confirmBtn.style.display = 'block';
+            confirmBtn.onclick = function() {
+                overlay.style.display = 'none';
+                if(nextPageId === 'page-q1') document.getElementById('top-tools').style.display = 'grid';
+                showPage(nextPageId);
+            };
+        }, duration);
     }
 
     function useTool(type) {
@@ -224,12 +240,21 @@
         }, 1000);
     }
 
-    function checkQ1() { if(document.getElementById('q1-input').value.trim()==='巴士站') showPage('page-q2'); else alert('再想想！'); }
-    function checkQ2() { if(document.getElementById('q2-input').value.trim().replace(/\s+/g,'').toLowerCase()==='792m-29') showPage('page-q3'); else alert('計算錯誤！'); }
-    function checkQ3() { if(document.getElementById('q3-input').value.trim()==='小滿定律') showPage('page-q4'); else alert('答案不對喔！'); }
+    function checkQ1() { 
+        if(document.getElementById('q1-input').value.trim()==='巴士站') triggerDraw('page-q2'); 
+        else alert('再想想！'); 
+    }
+    function checkQ2() { 
+        if(document.getElementById('q2-input').value.trim().replace(/\s+/g,'').toLowerCase()==='792m-29') triggerDraw('page-q3'); 
+        else alert('計算錯誤！'); 
+    }
+    function checkQ3() { 
+        if(document.getElementById('q3-input').value.trim()==='小滿定律') triggerDraw('page-q4'); 
+        else alert('答案不對喔！'); 
+    }
     function checkQ4() {
         const val = document.getElementById('q4-input').value.trim().replace(/\s+/g,'');
-        if(val === '20/9' || val === '2.22') showPage('page-q5');
+        if(val === '20/9' || val === '2.22') showPage('page-q5'); // 這裡修改為直接 showPage
         else alert("提示：追及時間 = 距離差 / 速度差");
     }
 
