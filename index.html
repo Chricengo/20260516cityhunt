@@ -60,14 +60,9 @@
         }
         
         .math-box { 
-            background: #f8f9fa; 
-            padding: 15px 5px; 
-            border-radius: 12px; 
-            margin-bottom: 15px; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 60px;
+            background: #f8f9fa; padding: 15px 5px; border-radius: 12px; 
+            margin-bottom: 15px; display: flex; align-items: center;
+            justify-content: center; min-height: 60px;
         }
 
         .fraction { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin-left: 4px; }
@@ -75,17 +70,19 @@
         .denominator { font-size: 0.9rem; padding-top: 2px; }
 
         #draw-overlay {
-            display: none;
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            z-index: 2000; border-radius: 24px;
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.95); z-index: 2000; border-radius: 24px;
             flex-direction: column; align-items: center; justify-content: center;
         }
-        #name-display {
-            font-size: 2.5rem; font-weight: 800; color: var(--primary);
-            height: 60px; line-height: 60px; margin: 20px 0;
-        }
+        #name-display { font-size: 2.5rem; font-weight: 800; color: var(--primary); height: 60px; line-height: 60px; margin: 20px 0; }
         .draw-hint { color: #666; font-size: 0.9rem; margin-bottom: 10px; }
+
+        .weather-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .weather-btn { 
+            padding: 30px 10px; border: 2px solid #eee; border-radius: 16px; 
+            background: white; font-size: 2rem; cursor: pointer; transition: 0.3s;
+        }
+        .weather-btn:hover { border-color: var(--secondary); background: #f0f0ff; }
 
         .square-container { display: flex; flex-direction: column; align-items: center; margin: 30px 0; }
         .square { width: 140px; height: 140px; border: 3px solid var(--secondary); background-color: rgba(83, 82, 237, 0.05); position: relative; }
@@ -122,9 +119,9 @@
 
         <div id="page-q1" class="page">
             <p style="font-weight:bold; color:var(--secondary)">問題 01</p>
-            <div style="background:#fff9db; padding:20px; border-radius:12px; text-align:center; font-size:1.2rem;">_EL_WC_CNQ_90_？_🏝️_🪵🔛</div>
+            <div style="background:#fff9db; padding:20px; border-radius:12px; text-align:center; font-size:1.2rem;">_EL_WC_90s_？_島_🪵⬆️</div>
             <input type="text" id="q1-input" placeholder="答案是？">
-            <button class="main-btn" onclick="checkQ1()">下一題</button>
+            <button class="main-btn" onclick="checkQ1()">下一關 (抽籤)</button>
         </div>
 
         <div id="page-q2" class="page">
@@ -137,7 +134,7 @@
                 </div>
             </div>
             <input type="text" id="q2-input" placeholder="計算結果">
-            <button class="main-btn" onclick="checkQ2()">下一題</button>
+            <button class="main-btn" onclick="checkQ2()">下一關 (抽籤)</button>
         </div>
 
         <div id="page-q3" class="page">
@@ -149,19 +146,42 @@
                 🇭🇰：？
             </div>
             <input type="text" id="q3-input" placeholder="這裡對應的是？">
-            <button class="main-btn" onclick="checkQ3()">下一題</button>
+            <button class="main-btn" onclick="checkQ3()">下一關 (抽籤)</button>
         </div>
 
-        <div id="page-q4" class="page">
-            <p style="font-weight:bold; color:var(--secondary)">問題 04</p>
-            <div class="math-box" style="display:block; text-align:left; padding:15px 20px;">
-                甲、乙兩人在 400 米環形跑道上跑：<br>
-                🏃‍♂️ 甲速度：200 米/分鐘<br>
-                🏃 乙速度：20 米/分鐘<br><br>
-                <b>問：甲經過多長時間才能第一次追上乙？請分組證明。</b>
+        <div id="page-weather" class="page">
+            <p style="font-weight:bold; color:var(--secondary); text-align:center;">查看窗外，當天天氣如何？</p>
+            <div class="weather-grid">
+                <button class="weather-btn" onclick="selectWeather('sunny')">☀️<br><span style="font-size:1rem">晴天</span></button>
+                <button class="weather-btn" onclick="selectWeather('rainy')">⛈️<br><span style="font-size:1rem">雨天</span></button>
             </div>
-            <input type="text" id="q4-input" placeholder="輸入答案(corr to 2 sig. fig.)">
-            <button class="main-btn" onclick="checkQ4()">進入終章</button>
+        </div>
+
+        <!-- 更新後的 Q4 題目 (往返相遇) -->
+        <div id="page-q4-sunny" class="page">
+            <p style="font-weight:bold; color:var(--secondary)">問題 04 (☀️模式)</p>
+            <div class="math-box" style="display:block; text-align:left; padding:15px 20px;">
+                甲、乙兩人在一段長度為 <b>100 米</b> 的直道兩端同時出發，往返跑步：<br>
+                🏃‍♂️ 甲速度：30 米/分鐘<br>
+                🏃 乙速度：50 米/分鐘<br><br>
+                <b>問：兩人第二次相遇的時間是多少分鐘？請分組證明。</b>
+            </div>
+            <input type="text" id="q4-sunny-input" placeholder="輸入答案 (兩個有效數字)">
+            <button class="main-btn" onclick="checkQ4Sunny()">進入終章</button>
+        </div>
+
+        <div id="page-q4-rainy" class="page">
+            <p style="font-weight:bold; color:var(--secondary)">問題 04 (⛈️模式)</p>
+            <div class="math-box" style="display:block; text-align:center; padding:15px 20px;">
+                <b>西瓜，香蕉，芒果哪種水果識游水？為什麼？</b>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <input type="text" id="q4-rainy-fruit" placeholder="水果名" style="flex:1">
+                <span>，因為</span>
+                <input type="text" id="q4-rainy-reason" placeholder="原因" style="flex:2">
+                <span>。</span>
+            </div>
+            <button class="main-btn" onclick="checkQ4Rainy()">進入終章</button>
         </div>
 
         <div id="page-q5" class="page">
@@ -175,15 +195,15 @@
             <p style="text-align:center;">請找出：<b>m<sup>2</sup></b>。</p>
             <input type="text" id="q5-input" placeholder="輸入計算結果">
             <button class="main-btn" onclick="checkQ5()">提交結算</button>
-            <p id="q5-fail" style="color:var(--primary); text-align:center; display:none; font-weight:bold; margin-top:15px;">❌ 系統驗證失敗：數值溢出或邏輯錯誤</p>
+            <p id="q5-fail" style="color:var(--primary); text-align:center; display:none; font-weight:bold; margin-top:15px;">❌ 系統驗證失敗！</p>
         </div>
     </div>
 </div>
 
 <script>
-    const nameList = ["Aaron", "Enoch", "HY", "Jacqueline", "Crystal", "Alex","Brian"];
+    const nameList = ["Aaron", "Enoch", "HY", "Jacqueline", "Crystal", "Alex", "Brian", "Guest"];
     let nextPageId = "";
-    let q4ErrorCount = 0; // 新增 Q4 錯誤計數器
+    let q4ErrorCount = 0;
 
     function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -249,22 +269,40 @@
         else alert('計算錯誤！'); 
     }
     function checkQ3() { 
-        if(document.getElementById('q3-input').value.trim()==='小滿定律') triggerDraw('page-q4'); 
+        if(document.getElementById('q3-input').value.trim()==='小滿定律') showPage('page-weather'); 
         else alert('答案不對喔！'); 
     }
 
-    function checkQ4() {
-        const val = document.getElementById('q4-input').value.trim().replace(/\s+/g,'');
-        if(val === '20/9' || val === '2.22') {
-            q4ErrorCount = 0; // 成功後重置
+    function selectWeather(type) {
+        if(type === 'sunny') { triggerDraw('page-q4-sunny'); } 
+        else { triggerDraw('page-q4-rainy'); }
+    }
+
+    // 更新後的 Q4 驗證邏輯：3 次錯誤後顯示詳細提示
+    function checkQ4Sunny() {
+        const val = document.getElementById('q4-sunny-input').value.trim().replace(/\s+/g,'');
+        if(val === '3.75') {
+            q4ErrorCount = 0;
             showPage('page-q5');
         } else {
             q4ErrorCount++;
-            if (q4ErrorCount >= 3) {
-                alert("答案錯誤！\n\n💡 提示：追及時間 = 距離差 / 速度差");
-            } else {
-                alert("答案錯誤！請再計算一次。");
+            if (q4ErrorCount >= 3) { 
+                alert("❌ 答案錯誤！\n\n【進階提示】\n這是在直道上的「往返」相遇：\n1. 第一次相遇時，兩人合走 1 倍全程。\n2. 第二次相遇時，兩人合走 3 倍全程。\n\n請用「總路程 300 米」除以「速度和」再試一次！"); 
+            } 
+            else { 
+                alert("❌ 答案錯誤！請再計算一次。\n（提示：注意「往返」和「第二次相遇」的邏輯）"); 
             }
+        }
+    }
+
+    function checkQ4Rainy() {
+        const fruit = document.getElementById('q4-rainy-fruit').value.trim();
+        const reason = document.getElementById('q4-rainy-reason').value.trim().toLowerCase();
+        
+        if(fruit.includes('芒果') && reason.includes('mango swimming club')) {
+            showPage('page-q5');
+        } else {
+            alert("答錯啦！");
         }
     }
 
